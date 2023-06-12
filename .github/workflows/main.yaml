@@ -13,11 +13,10 @@ jobs:
 
   sample:
     runs-on: ubuntu-22.04
-    needs: maven-build
+    needs: docker
     steps:
-      - name: download artifactory
-        uses: actions/download-artifact@v3
-        with:
-          name: jar-file
-      - name: list if contain or not
-        run: ls
+      - name: Git Checkout
+        uses: actions/checkout@v3
+      - name: docker-push-scan
+        uses: ./.github/actions/docker
+        
