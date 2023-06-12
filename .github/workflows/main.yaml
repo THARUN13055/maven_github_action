@@ -11,12 +11,20 @@ jobs:
       - name: Maven jar package
         uses: ./.github/actions/maven-jar
 
-  sample:
+  Sonarqube:
     runs-on: ubuntu-22.04
-    needs: docker
+    needs: maven-build
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v3
+    
+  docker:
+    runs-on: ubuntu-22.04
+    needs: Sonarqube
     steps:
       - name: Git Checkout
         uses: actions/checkout@v3
       - name: docker-push-scan
         uses: ./.github/actions/docker
+
         
