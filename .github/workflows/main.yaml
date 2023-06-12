@@ -17,6 +17,8 @@ jobs:
     steps:
       - name: Git Checkout
         uses: actions/checkout@v3
+      - name: Sonarqube scanner
+        uses: ./.github/actions/sonarqube
     
   docker:
     runs-on: ubuntu-22.04
