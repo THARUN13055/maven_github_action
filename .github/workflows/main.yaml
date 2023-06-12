@@ -21,6 +21,3 @@ jobs:
           name: jar-file
       - name: list if contain or not
         run: ls
-        shell: bash
-      - name: or else check destination path
-        run: cd /jar && ls
