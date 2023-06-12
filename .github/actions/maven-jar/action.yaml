@@ -38,4 +38,4 @@ runs:
       uses: actions/upload-artifact@v3
       with:
         name: jar-file
-        path: /jar
+        path: ./target/*.jar
