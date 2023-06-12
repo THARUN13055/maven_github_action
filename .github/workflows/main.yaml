@@ -1,0 +1,25 @@
+name: maven-springboot-project
+
+on: workflow_dispatch
+
+jobs:
+  maven-build:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v3
+      - name: Maven jar package
+        uses: ./.github/actions/maven-jar
+
+  sample:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: download artifactory
+        uses: actions/download-artifact@v3
+        with:
+          name: jar-file
+      - name: list if contain or not
+        run: ls
+        shell: bash
+      - name: or else check destination path
+        run: cd /jar && ls
