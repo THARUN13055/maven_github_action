@@ -11,14 +11,6 @@ runs:
       with: 
         name: jar-file
 
-    - name: Docker login
-      env:
-        DOCKER_USER: ${{ secrets.DOCKER_USER }}
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      run: |
-        docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-      shell: bash
-
     - name: Get the latest tag
       id: get_latest_tag
       run: echo "::set-output name=tag::$(git describe --abbrev=0 --tags)"
