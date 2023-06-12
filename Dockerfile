@@ -3,5 +3,5 @@ COPY . .
 RUN mvn install
 
 FROM openjdk:11.0
-COPY --from=build /*.jar .
-CMD [ "java","-jar","/*.jar" ]
+COPY --from=build /springboot-app.jar .
+CMD [ "java","-jar","/springboot-app.jar" ]
