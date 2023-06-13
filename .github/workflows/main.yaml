@@ -36,7 +36,7 @@ jobs:
 
   docker:
     runs-on: ubuntu-22.04
-    needs: Sonarqube
+    needs: maven-build
     steps:
       - name: Git Checkout
         uses: actions/checkout@v3
