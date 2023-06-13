@@ -42,6 +42,7 @@ runs:
       with:
         sarif_file: 'trivy-image-results.sarif'
         ref: ${{ github.ref }}
+        sha: ${{ github.sha }}
 
     
     - name: docker image Push
