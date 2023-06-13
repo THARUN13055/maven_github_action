@@ -35,8 +35,8 @@ runs:
         exit-code: '1'
         ignore-unfixed: true
         vuln-type: 'os,library'
-        severity: 'CRITICAL'
-        ignore-severity: 'HIGH,UNKNOWN'
+        # severity: 'CRITICAL'
+        # ignore-severity: 'HIGH,UNKNOWN'
       id: trivy-scan
       env:
         TRIVY_OUTPUT_FILE: trivy_report.txt
