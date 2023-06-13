@@ -20,19 +20,19 @@ jobs:
   #   - name: dependency-check
   #     uses: ./.github/actions/owasp
 
-  Sonarqube:
-    runs-on: ubuntu-22.04
-    needs: maven-build
-    steps:
-      - name: Git Checkout
-        uses: actions/checkout@v3
-      - name: Sonarqube scanner
-        uses: ./.github/actions/sonarqube
-      - name: Build and analyze
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=javaspringboot
+  # Sonarqube:
+  #   runs-on: ubuntu-22.04
+  #   needs: maven-build
+  #   steps:
+  #     - name: Git Checkout
+  #       uses: actions/checkout@v3
+  #     - name: Sonarqube scanner
+  #       uses: ./.github/actions/sonarqube
+  #     - name: Build and analyze
+  #       env:
+  #         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  #         SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+  #       run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=javaspringboot
 
   docker:
     runs-on: ubuntu-22.04

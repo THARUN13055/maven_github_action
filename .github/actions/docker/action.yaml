@@ -32,16 +32,15 @@ runs:
       with:
         image-ref: 'tharun13055/springboot-app:lastest'
         security-checks: 'vuln,secret,config'
-        format: 'sarfi'
+        format: 'sarif'
         args: --ignore-unfixed
         output: 'trivy-image-results.sarif'
         severity: ''
-    - name: upload the results
+    - name: Upload the results
       uses: github/codeql-action/upload-sarif@v2
       with:
         sarif_file: 'trivy-image-results.sarif'
         category: 'image'
-
     
     - name: docker image Push
       run: |
