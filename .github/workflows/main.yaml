@@ -11,9 +11,20 @@ jobs:
       - name: Maven jar package
         uses: ./.github/actions/maven-jar
 
-  Sonarqube:
+  maven-dep-check:
     runs-on: ubuntu-22.04
     needs: maven-build
+    steps:
+    - name: Download jarfile
+      uses: actions/download-artifact@v3
+      with:
+        name: jar-file
+    - name: dependency-check
+      uses: ./.github/actions/owasp
+
+  Sonarqube:
+    runs-on: ubuntu-22.04
+    needs: maven-dep-check
     steps:
       - name: Git Checkout
         uses: actions/checkout@v3
@@ -40,6 +51,6 @@ jobs:
         shell: bash
       - name: docker-push-scan
         uses: ./.github/actions/docker
-        
+
 
         

@@ -3,11 +3,6 @@ description: It is used to check the pom.xml package
 runs:
   using: composite
   steps:
-    - name: Checkout
-      uses: actions/checkout@v2
-    - name: Build project with Maven
-      run: mvn clean install
-      shell: bash
     - name: Dependencycheck
       uses: dependency-check/Dependency-Check_Action@main
       id: Depcheck
