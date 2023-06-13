@@ -22,7 +22,7 @@ jobs:
 
   Sonarqube:
     runs-on: ubuntu-22.04
-    needs: maven-dep-check
+    needs: maven-build
     steps:
       - name: Git Checkout
         uses: actions/checkout@v3
