@@ -30,13 +30,19 @@ runs:
     - name: Aqua Security Trivy
       uses: aquasecurity/trivy-action@0.11.2
       with:
-          image-ref: 'tharun13055/springboot-app:lastest'
-          format: 'table'
-          exit-code: '1'
-          ignore-unfixed: true
-          vuln-type: 'os,library'
-          severity: 'CRITICAL'
-          ignore-severity: 'HIGH,UNKNOWN'
+        image-ref: 'tharun13055/springboot-app:lastest'
+        format: 'table'
+        exit-code: '1'
+        ignore-unfixed: true
+        vuln-type: 'os,library'
+        severity: 'CRITICAL'
+        ignore-severity: 'HIGH,UNKNOWN'
+      id: trivy-scan
+      env:
+        TRIVY_OUTPUT_FILE: trivy_report.txt
+    - name: Save Trivy Report
+      run: echo "${{ steps.trivy-scan.outputs.result }}" > $TRIVY_OUTPUT_FILE
+      shell: bash
     
     - name: docker image Push
       run: |
