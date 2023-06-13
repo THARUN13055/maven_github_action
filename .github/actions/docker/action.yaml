@@ -31,16 +31,17 @@ runs:
       uses: aquasecurity/trivy-action@0.11.2
       with:
         image-ref: 'tharun13055/springboot-app:lastest'
-        format: 'table'
+        security-checks: 'vuln,secret,config'
+        format: 'sarfi'
         args: --ignore-unfixed
-      id: trivy-scan
-      env:
-        TRIVY_OUTPUT_FILE: trivy_report.txt
+        output: 'trivy-image-results.sarif'
+        severity: ''
+    - name: upload the results
+      uses: github/codeql-action/upload-sarif@v2
+      with:
+        sarif_file: 'trivy-image-results.sarif'
+        category: 'image'
 
-    - name: Save Trivy Report
-      run: |
-        echo "${{ steps.trivy-scan.outputs.result }}" > $TRIVY_OUTPUT_FILE
-      shell: bash
     
     - name: docker image Push
       run: |
