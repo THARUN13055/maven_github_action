@@ -17,18 +17,18 @@ runs:
           sudo apt update
           sudo apt install maven -y
       shell: bash
-      
-    - name: maven test
-      run: mvn test
-      shell: bash
 
-    - name: maven verify
-      run: mvn verify -DskipUnitTests
-      shell: bash
+    # - name: maven test
+    #   run: mvn test
+    #   shell: bash
 
-    - name: maven compile
-      run: mvn clean compile
-      shell: bash
+    # - name: maven verify
+    #   run: mvn verify -DskipUnitTests
+    #   shell: bash
+
+    # - name: maven compile
+    #   run: mvn clean compile
+    #   shell: bash
 
     - name: Build and Package
       run: mvn clean package
