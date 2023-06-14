@@ -57,6 +57,8 @@ jobs:
     runs-on: ubuntu-22.04
     needs: maven-build
     steps:
+    - name: git Checkout
+      uses: actions/checkout@v3
     - name: Nexus Repo Publish
       uses: sonatype-nexus-community/nexus-repo-github-action@master
       with:
