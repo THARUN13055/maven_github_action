@@ -73,7 +73,6 @@
     <distributionManagement>
       <repository>
         <id>nexus</id>
-        <name>nexus</name>
         <url>http://172.190.41.71:8081/repository/nexus/</url>
       </repository>
     </distributionManagement>

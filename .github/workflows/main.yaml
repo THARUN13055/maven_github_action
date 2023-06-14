@@ -50,34 +50,57 @@ jobs:
   #     - name: docker-push-scan
   #       uses: ./.github/actions/docker
   
-  nexus:
-    runs-on: ubuntu-22.04
-    needs: maven-build
-    steps:
-      - name: git checkout
-        uses: actions/checkout@v3
-      - name: nexus jar push
-        uses: ./.github/actions/nexus
-      - name: Upload to Nexus or Artifactory
-        env:
-          NEXUS_URL: ${{ secrets.NEXUS_URL }}
-          NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
-          NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
-        run: |
-            mvn deploy:deploy-file
-            -Dfile=target/springboot-app.jar
-            -DrepositoryId=nexus
-            -Durl=$NEXUS_URL
-            -DgeneratePom=false
-            -Dpackaging=jar
-            -DgroupId=com.abhishek 
-            -DartifactId=spring-boot-demo
-            -Dversion=1.0  
-            -DgeneratePom.description="this project is build in maven"  
-            -Drepository.url=$NEXUS_URL/repository/nexus/
-            -Drepository.username=$NEXUS_USERNAME
-            -Drepository.password=$NEXUS_PASSWORD
-        shell: bash
-
+  # nexus:
+  #   runs-on: ubuntu-22.04
+  #   needs: maven-build
+  #   steps:
+  #     - name: git checkout
+  #       uses: actions/checkout@v3
+  #     - name: nexus jar push
+  #       uses: ./.github/actions/nexus
+  #     - name: Upload to Nexus or Artifactory
+  #       env:
+  #         NEXUS_URL: ${{ secrets.NEXUS_URL }}
+  #         NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
+  #         NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
+  #       run: |
+  #           mvn deploy:deploy-file
+  #           -Dfile=target/springboot-app.jar
+  #           -DrepositoryId=nexus
+  #           -Durl=$NEXUS_URL
+  #           -DgeneratePom=false
+  #           -Dpackaging=jar
+  #           -DgroupId=com.abhishek 
+  #           -DartifactId=spring-boot-demo
+  #           -Dversion=1.0  
+  #           -DgeneratePom.description="this project is build in maven"  
+  #           -Drepository.url=$NEXUS_URL/repository/nexus/
+  #           -Drepository.username=$NEXUS_USERNAME
+  #           -Drepository.password=$NEXUS_PASSWORD
+  #       shell: bash
+  
 
         
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+    - name: Build with Maven
+      run: mvn package --file pom.xml
+    - name: Nexus Repo Publish
+      uses: sonatype-nexus-community/nexus-repo-github-action@master
+      with:
+        serverUrl: ${{ secrets.NEXUS_URL}}
+        username: ${{ secrets.NEXUS_USERNAME }}
+        password: ${{ secrets.NEXUS_PASSWORD }}
+        format: maven2
+        repository: nexus
+        coordinates: groupId=com.abhishek artifactId=spring-boot-demo version=1.0
+        assets: extension=jar
+        filename: ./target/springboot-app.jar
