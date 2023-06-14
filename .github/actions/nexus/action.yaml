@@ -4,38 +4,15 @@ description: it will push the jar file to nexus
 
 runs:
   using: composite
-
   steps:
-    - name: Set up JDK
-      uses: actions/setup-java@v2
+    - name: github checkout
+      uses: actions/checkout@v3
+    - name: Set up JDK 11
+      if: steps.maven-cache.outputs.cache-hit != 'true'
+      uses: actions/setup-java@v3
       with:
-        java-version: 11
+        java-version: '11'
         distribution: 'temurin'
-
-    - name: install Maven
-      run: |
-          sudo apt update
-          sudo apt install maven -y
+    - name: Build with Maven
+      run: mvn package --file pom.xml
       shell: bash
-
-    # - name: maven test
-    #   run: mvn test
-    #   shell: bash
-
-    # - name: maven verify
-    #   run: mvn verify -DskipUnitTests
-    #   shell: bash
-
-    # - name: maven compile
-    #   run: mvn clean compile
-    #   shell: bash
-
-    - name: Build and Package
-      run: mvn clean package
-      shell: bash
-
-    # - name: restore maven cache
-    #   uses: actions/cache@v2
-    #   with:
-    #     path: ~/.m2/repository
-    #     key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
