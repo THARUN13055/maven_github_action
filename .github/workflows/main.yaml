@@ -59,20 +59,24 @@ jobs:
       - name: nexus jar push
         uses: ./.github/actions/nexus
       - name: Upload to Nexus or Artifactory
+        env:
+          NEXUS_URL: ${{ secrets.NEXUS_URL }}
+          NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
+          NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
         run: |
           mvn deploy:deploy-file
             -Dfile=target/springboot-app.jar
             -DrepositoryId=nexus
-            -Durl=${{ secrets.NEXUS_URL }}
+            -Durl=$NEXUS_URL
             -DgeneratePom=false
             -Dpackaging=jar
             -DgroupId=com.abhishek 
             -DartifactId=spring-boot-demo
             -Dversion=1.0  
             -DgeneratePom.description="this project is build in maven"  
-            -Drepository.url=${{ secrets.NEXUS_URL }}/repository/nexus/
-            -Drepository.username=${{ secrets.NEXUS_USERNAME }}
-            -Drepository.password=${{ secrets.NEXUS_PASSWORD }}
+            -Drepository.url=$NEXUS_URL/repository/nexus/
+            -Drepository.username=$NEXUS_USERNAME
+            -Drepository.password=$NEXUS_PASSWORD
         shell: bash
 
 
