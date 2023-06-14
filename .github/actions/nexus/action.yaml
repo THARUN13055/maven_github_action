@@ -6,8 +6,12 @@ runs:
   using: composite
 
   steps:
-    - name: artifactory download
-      uses: actions/download-artifact@v3
+    - name: Set up JDK
+      uses: actions/setup-java@v2
       with:
-        name: jar-file
-
+        java-version: 11
+    - name: restore maven cache
+      uses: actions/cache@v2
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
