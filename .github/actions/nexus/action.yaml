@@ -11,20 +11,3 @@ runs:
       with:
         name: jar-file
         path: /target/springboot-app.jar
-
-    - name: Upload to Nexus or Artifactory
-      run: |
-        mvn deploy:deploy-file
-          -Dfile=target/springboot-app.jar
-          -DrepositoryId=nexus
-          -Durl=${{ secrets.NEXUS_URL }}
-          -DgeneratePom=false
-          -Dpackaging=jar
-          -DgroupId=com.abhishek 
-          -DartifactId=spring-boot-demo
-          -Dversion=1.0  
-          -DgeneratePom.description="this project is build in maven"  
-          -Drepository.url=${{ secrets.NEXUS_URL }}/repository/nexus/
-          -Drepository.username=${{ secrets.NEXUS_USERNAME }}
-          -Drepository.password=${{ secrets.NEXUS_PASSWORD }}
-      shell: bash
