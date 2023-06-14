@@ -34,21 +34,30 @@ jobs:
   #         SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
   #       run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=javaspringboot
 
-  docker:
+  # docker:
+  #   runs-on: ubuntu-22.04
+  #   needs: maven-build
+  #   steps:
+  #     - name: Git Checkout
+  #       uses: actions/checkout@v3
+  #     - name: Docker login
+  #       env:
+  #         DOCKER_USER: ${{ secrets.DOCKER_USER }}
+  #         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+  #       run: |
+  #         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+  #       shell: bash
+  #     - name: docker-push-scan
+  #       uses: ./.github/actions/docker
+  
+  nexus:
     runs-on: ubuntu-22.04
     needs: maven-build
     steps:
-      - name: Git Checkout
+      - name: git checkout
         uses: actions/checkout@v3
-      - name: Docker login
-        env:
-          DOCKER_USER: ${{ secrets.DOCKER_USER }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        run: |
-          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-        shell: bash
-      - name: docker-push-scan
-        uses: ./.github/actions/docker
+      - name: nexus jar push
+        uses: ./.github/actions/nexus
 
 
         
