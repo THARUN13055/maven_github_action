@@ -53,18 +53,18 @@ jobs:
 
 
         
-  # nexus:
-  #   runs-on: ubuntu-22.04
-  #   needs: maven-build
-  #   steps:
-  #   - name: Nexus Repo Publish
-  #     uses: sonatype-nexus-community/nexus-repo-github-action@master
-  #     with:
-  #       serverUrl: ${{ secrets.NEXUS_URL}}
-  #       username: ${{ secrets.NEXUS_USERNAME }}
-  #       password: ${{ secrets.NEXUS_PASSWORD }}
-  #       format: maven2
-  #       repository: nexus
-  #       coordinates: groupId=com.abhishek artifactId=spring-boot-demo version=1.0
-  #       assets: extension=jar
-  #       filename: ./target/springboot-app.jar
+  nexus:
+    runs-on: ubuntu-22.04
+    needs: maven-build
+    steps:
+    - name: Nexus Repo Publish
+      uses: sonatype-nexus-community/nexus-repo-github-action@master
+      with:
+        serverUrl: ${{ secrets.NEXUS_URL}}
+        username: ${{ secrets.NEXUS_USERNAME }}
+        password: ${{ secrets.NEXUS_PASSWORD }}
+        format: maven2
+        repository: nexus
+        coordinates: groupId=com.abhishek artifactId=spring-boot-demo version=1.0
+        assets: extension=jar
+        filename: ./target/springboot-app.jar
