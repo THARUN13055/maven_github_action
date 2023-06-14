@@ -10,11 +10,18 @@ runs:
       uses: actions/setup-java@v2
       with:
         java-version: 11
+        distribution: 'temurin'
+
+    - name: install Maven
+      run: |
+          sudo apt update
+          sudo apt install maven -y
+      shell: bash
 
     - name: Build and Package
       run: mvn clean package
       shell: bash
-      
+
     # - name: restore maven cache
     #   uses: actions/cache@v2
     #   with:
