@@ -17,12 +17,12 @@ runs:
           sudo apt update
           sudo apt install maven -y
       shell: bash
-    - name: Cache Maven Dependencies
-      id: maven-cache
-      uses: actions/cache@v2
-      with:
-        path: ~/.m2/repository
-        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+    # - name: Cache Maven Dependencies
+    #   id: maven-cache
+    #   uses: actions/cache@v2
+    #   with:
+    #     path: ~/.m2/repository
+    #     key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
 
     - name: maven test
       run: mvn test

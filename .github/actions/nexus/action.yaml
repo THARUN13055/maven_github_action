@@ -10,8 +10,13 @@ runs:
       uses: actions/setup-java@v2
       with:
         java-version: 11
-    - name: restore maven cache
-      uses: actions/cache@v2
-      with:
-        path: ~/.m2/repository
-        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+
+    - name: Build and Package
+      run: mvn clean package
+      shell: bash
+      
+    # - name: restore maven cache
+    #   uses: actions/cache@v2
+    #   with:
+    #     path: ~/.m2/repository
+    #     key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
