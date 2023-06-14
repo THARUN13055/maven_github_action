@@ -76,14 +76,7 @@
         <url>http://172.190.41.71:8081/repository/nexus/</url>
       </repository>
     </distributionManagement>
-    <server>
-        <id>nexus</id>
-        <username>admin</username>
-        <password>admin</password>
-        <configuration>
-            <updatePolicy>always</updatePolicy>
-        </configuration>
-    </server>
+
 
 
 </project>
