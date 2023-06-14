@@ -8,6 +8,13 @@ jobs:
     steps:
       - name: Git Checkout
         uses: actions/checkout@v3
+      - name: Cache local Maven repository
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
       - name: Maven jar package
         uses: ./.github/actions/maven-jar
 
@@ -59,6 +66,13 @@ jobs:
     steps:
     - name: git Checkout
       uses: actions/checkout@v3
+    - name: Cache local Maven repository
+      uses: actions/cache@v2
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        restore-keys: |
+          ${{ runner.os }}-maven-
     - name: git action add
       uses: ./.github/actions/nexus
     - name: Nexus Repo Publish
