@@ -10,4 +10,4 @@ runs:
       uses: actions/download-artifact@v3
       with:
         name: jar-file
-        path: /target/springboot-app.jar
+
