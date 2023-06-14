@@ -65,7 +65,7 @@ jobs:
           NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
         run: |
           mvn deploy:deploy-file
-            -Dfile=springboot-app.jar
+            -Dfile=target/springboot-app.jar
             -DrepositoryId=nexus
             -Durl=$NEXUS_URL
             -DgeneratePom=false
