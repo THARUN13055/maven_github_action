@@ -35,7 +35,7 @@ runs:
         exit-code: '0'
         ignore-unfixed: true
         vuln-type: 'os,library'
-        command: '-o trivy-output.json'
+        command: '--output trivy-output.json'
     - name: list
       run: ls
       shell: bash
