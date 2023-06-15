@@ -35,12 +35,6 @@ runs:
         exit-code: '0'
         ignore-unfixed: true
         vuln-type: 'os,library'
-        args: |
-          --output output.sarif.tmp
-          && mv output.sarif.tmp output.sarif
-    - name: list
-      run: ls
-      shell: bash
         # severity: 'LOW'
     #   id: trivy-scan
     #   env:
