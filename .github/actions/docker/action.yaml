@@ -31,10 +31,14 @@ runs:
       uses: aquasecurity/trivy-action@0.11.2
       with:
         image-ref: 'tharun13055/springboot-app:lastest'
-        format: 'table'
+        format: 'sarif'
         exit-code: '0'
         ignore-unfixed: true
         vuln-type: 'os,library'
+        command: '--output trivy-output.sarif'
+    - name: list
+      run: ls
+      shell: bash
         # severity: 'LOW'
     #   id: trivy-scan
     #   env:
@@ -45,9 +49,9 @@ runs:
     #   shell: bash
 
     
-    - name: docker image Push
-      run: |
-        docker push tharun13055/springboot-app:latest
-        docker push tharun13055/springboot-app:${{ steps.increment_tag.outputs.tag }}
-      shell: bash
+    # - name: docker image Push
+    #   run: |
+    #     docker push tharun13055/springboot-app:latest
+    #     docker push tharun13055/springboot-app:${{ steps.increment_tag.outputs.tag }}
+    #   shell: bash
 
