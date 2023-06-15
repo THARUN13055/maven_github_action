@@ -23,30 +23,31 @@ runs:
     
     - name: Docker image build
       run: |
-        docker build -t tharun13055/springboot-app:lastest .
+        docker build -t tharun13055/springboot-app:latest .
         docker build -t tharun13055/springboot-app:${{ steps.increment_tag.outputs.tag }} .
       shell: bash
     
-    # - name: Aqua Security Trivy
-    #   uses: aquasecurity/trivy-action@0.11.2
-    #   with:
-    #     image-ref: 'tharun13055/springboot-app:lastest'
-    #     format: 'table'
-    #     exit-code: '1'
-    #     ignore-unfixed: true
-    #     vuln-type: 'os,library'
-    #     severity: 'CRITICAL,HIGH'
-    #   id: trivy-scan
-    #   env:
-    #     TRIVY_OUTPUT_FILE: trivy_report.txt
+    - name: Aqua Security Trivy
+      uses: aquasecurity/trivy-action@0.11.2
+      with:
+        image-ref: 'tharun13055/springboot-app:lastest'
+        format: 'table'
+        exit-code: '1'
+        ignore-unfixed: true
+        vuln-type: 'os,library'
+        # severity: 'LOW'
+      id: trivy-scan
+      env:
+        TRIVY_OUTPUT_FILE: trivy_report.txt
 
-    # - name: Save Trivy Report
-    #   run: echo "${{ steps.trivy-scan.outputs.result }}" > $TRIVY_OUTPUT_FILE
+    - name: Save Trivy Report
+      run: echo "${{ steps.trivy-scan.outputs.result }}" > $TRIVY_OUTPUT_FILE
+      shell: bash
 
     
     - name: docker image Push
       run: |
-        docker push tharun13055/springboot-app:lastest
+        docker push tharun13055/springboot-app:latest
         docker push tharun13055/springboot-app:${{ steps.increment_tag.outputs.tag }}
       shell: bash
 
