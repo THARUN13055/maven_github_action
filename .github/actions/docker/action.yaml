@@ -36,13 +36,13 @@ runs:
         ignore-unfixed: true
         vuln-type: 'os,library'
         # severity: 'LOW'
-      id: trivy-scan
-      env:
-        TRIVY_OUTPUT_FILE: trivy_report.txt
+    #   id: trivy-scan
+    #   env:
+    #     TRIVY_OUTPUT_FILE: trivy_report.txt
 
-    - name: Save Trivy Report
-      run: echo "${{ steps.trivy-scan.outputs.result }}" > $TRIVY_OUTPUT_FILE
-      shell: bash
+    # - name: Save Trivy Report
+    #   run: echo "${{ steps.trivy-scan.outputs.result }}" > $TRIVY_OUTPUT_FILE
+    #   shell: bash
 
     
     - name: docker image Push
