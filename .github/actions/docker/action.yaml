@@ -31,11 +31,13 @@ runs:
       uses: aquasecurity/trivy-action@0.11.2
       with:
         image-ref: 'tharun13055/springboot-app:lastest'
-        format: 'json'
+        format: 'table'
         exit-code: '0'
         ignore-unfixed: true
         vuln-type: 'os,library'
-        command: '--output trivy-output.json'
+        args: |
+          --output output.sarif.tmp
+          && mv output.sarif.tmp output.sarif
     - name: list
       run: ls
       shell: bash
