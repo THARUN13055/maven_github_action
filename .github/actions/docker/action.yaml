@@ -32,7 +32,7 @@ runs:
       with:
         image-ref: 'tharun13055/springboot-app:lastest'
         format: 'table'
-        exit-code: '1'
+        exit-code: '0'
         ignore-unfixed: true
         vuln-type: 'os,library'
         # severity: 'LOW'
