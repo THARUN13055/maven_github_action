@@ -1,0 +1,11 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: spring-role
+  labels:
+    kubernetes.io/name: spring-account
+  namespace: springboot
+rules:
+  apiGroups: ['']
+  resources: ["Pod","Deployment","Service","Namespace"]
+  verbs: ["create","get","update","delete","list"]
