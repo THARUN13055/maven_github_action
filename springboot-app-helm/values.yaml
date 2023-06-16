@@ -38,7 +38,7 @@ rolebindingname: springboot-rolebindings
 # Role
 rolename: springboot-role
 rules:
-  - apiGroup: ["*"]
+  - apiGroups: ["*"]
     resources: ["Pod","Deployment","Service","Namespace"]
     verbs: ["create","get","update","delete","list"]
 
