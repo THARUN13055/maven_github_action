@@ -6,10 +6,10 @@ metadata:
     {{- toYaml .Values.labels | nindent 4}}
   namespace: springboot
 roleRef:
-  apiGroups: ''
+  apiGroup: rbac.authorization.k8s.io
   kind: Role
   name: {{ .Values.rolename}}
 subjects:
-  kind: ServiceAccount
-  name: {{ .Values.serviceaccountname}}
-  namespace: {{ .Values.namespace.name}}
+  - kind: ServiceAccount
+    name: {{ .Values.serviceaccountname}}
+    namespace: {{ .Values.namespace.name}}

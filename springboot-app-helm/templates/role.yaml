@@ -6,6 +6,4 @@ metadata:
     {{- toYaml .Values.labels | nindent 4}}
   namespace: {{ .Values.namespace.name}}
 rules:
-  apiGroups: ['']
-  resources: {{ .Values.rules.resources}}
-  verbs: {{ .Values.rules.verbs}}
+  {{- toYaml .Values.rules | nindent 2}}

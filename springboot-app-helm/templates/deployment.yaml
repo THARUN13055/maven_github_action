@@ -3,17 +3,17 @@ kind: Deployment
 metadata:
   name: {{ .Values.deploymentname}}
   labels:
-    {{-toYaml .Values.labels | nindent 4}}
+    {{- toYaml .Values.labels | nindent 4}}
   namespace: {{ .Values.namespace.name}}
 spec:
   replicas: {{ .Values.spec.replicas}}
   selector:
     matchLabels:
-      {{-toYaml .Values.labels | nindent 6}}
+      {{- toYaml .Values.labels | nindent 6}}
   template:
     metadata:
       labels:
-        {{-toYaml .Values.labels | nindent 8}}
+        {{- toYaml .Values.labels | nindent 8}}
     spec:
       serviceAccountName: {{ .Values.serviceaccountname}}
       containers:
@@ -23,4 +23,4 @@ spec:
           ports:
             - containerPort: {{ .Values.spec.containers.ports}}
           resources:
-            {{-toYaml .Values.resources | nindent 12}}
+            {{- toYaml .Values.resources | nindent 12}}
