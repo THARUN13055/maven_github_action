@@ -13,3 +13,4 @@ spec:
       port: {{ .Values.servicespec.port}}
       protocol: {{ .Values.servicespec.protocol}} 
   type: {{ .Values.servicespec.type}}
+  serviceAccountName: {{ .Values.serviceaccountname}}
