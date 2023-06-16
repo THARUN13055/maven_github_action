@@ -38,9 +38,9 @@ rolebindingname: springboot-rolebindings
 # Role
 rolename: springboot-role
 rules:
-  apiGroups: ["*"]
-  resources: ["Pod","Deployment","Service","Namespace"]
-  verbs: ["create","get","update","delete","list"]
+  - apiGroup: ["*"]
+    resources: ["Pod","Deployment","Service","Namespace"]
+    verbs: ["create","get","update","delete","list"]
 
 # HPA
 hpaname: springboot-hpa
