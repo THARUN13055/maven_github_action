@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.servicename}}
+  labels:
+    {{-toYaml .Values.labels | nindent 4}}
+  namespace: {{ .Values.namespace.name}}
+spec:
+  selector:
+    {{-toYaml .Values.labels | nindent 4}}
+  ports:
+    - targetPort: {{ .Values.spec.containers.ports}}
+      Port: {{ .Values.servicespec.port}}
+      protocol: {{ .Values.servicespec.protocol}} 
+  type: {{ .Values.servicespec.type}}

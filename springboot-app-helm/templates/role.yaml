@@ -1,11 +1,11 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: spring-role
+  name: {{ .Values.rolename}}
   labels:
-    kubernetes.io/name: spring-account
-  namespace: springboot
+    {{- toYaml .Values.labels | nindent 4}}
+  namespace: {{ .Values.namespace.name}}
 rules:
   apiGroups: ['']
-  resources: ["Pod","Deployment","Service","Namespace"]
-  verbs: ["create","get","update","delete","list"]
+  resources: {{ .Values.rules.resources}}
+  verbs: {{ .Values.rules.verbs}}

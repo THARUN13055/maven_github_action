@@ -1,15 +1,15 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: spring-rolebinding
+  name: {{ .Values.rolebindingname}}
   labels:
-    kubernetes.io/name: service-account
+    {{- toYaml .Values.labels | nindent 4}}
   namespace: springboot
 roleRef:
   apiGroups: ''
   kind: Role
-  name: spring-role
+  name: {{ .Values.rolename}}
 subjects:
   kind: ServiceAccount
-  name: spring-serviceaccount
-  namespace: springboot
+  name: {{ .Values.serviceaccountname}}
+  namespace: {{ .Values.namespace.name}}

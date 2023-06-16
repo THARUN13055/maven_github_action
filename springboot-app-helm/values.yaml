@@ -1,0 +1,54 @@
+# Common
+namespace:
+  name: springboot
+
+labels:
+   application: springboot-app
+
+#deployment
+deploymentname: springboot-deployment
+spec:
+  replicas: 3
+  containers:
+    name: springboot-container
+    image: tharun13055/springboot-app:latest
+    imagePullPolicy: Always
+    ports: 8080
+resources:
+  request:
+    cpu: "256m"
+    memory: "1Gi"
+  limits:
+    cpu: "512m"
+    memory: "1Gi"
+
+
+# service 
+servicename: springboot-service
+servicespec:
+  protocol: Tcp
+  port: 80
+  type: LoadBalancer
+  
+
+serviceaccountname: service-account
+rolebindingname: springboot-rolebindings
+
+
+# Role
+rolename: springboot-role
+rules:
+  resources: ["Pod","Deployment","Service","Namespace"]
+  verbs: ["create","get","update","delete","list"]
+
+# HPA
+hpaname: springboot-hpa
+hpaspec:
+  minReplicas: 2
+  maxReplicas: 10
+metrics:
+  type: Resource
+  name: cpu
+  target: 
+    type: Utilization
+    averageUtilization: 50
