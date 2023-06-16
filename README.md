@@ -76,7 +76,7 @@ sudo docker run -it --name springboot -d -p 8080:8080 springboot-app:tagname bas
 
 ## Github_action
 
-    In this Github action we use some of the actions. And here we use **composite**  which is use to make code efficient.In this github action we use some actions...
+In this Github action we use some of the actions. And here we use **composite**  which is use to make code efficient.In this github action we use some actions...
 1. maven-jar
 2. owasp
 3. sonarqube
