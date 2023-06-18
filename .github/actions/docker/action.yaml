@@ -44,9 +44,9 @@ runs:
     #   shell: bash
 
     
-    - name: docker image Push
-      run: |
-        docker push tharun13055/springboot-app:latest
-        docker push tharun13055/springboot-app:${{ steps.increment_tag.outputs.tag }}
-      shell: bash
+    # - name: docker image Push
+    #   run: |
+    #     docker push tharun13055/springboot-app:latest
+    #     docker push tharun13055/springboot-app:${{ steps.increment_tag.outputs.tag }}
+    #   shell: bash
 
