@@ -35,10 +35,10 @@ jobs:
 
       - name: Terraform Plan
         run: |
-          terraform plan -var "client_id=${{ secrets.TF_CLIENT_ID }}" -var "tenant_id=${{ secrets.TF_TENANT_ID }}" -var "subscription_id={{secrets.TF_SUBSCRIPTION_ID}}" -var "client_secret={{secrets.TF_CLIENT_SECRET}}"
+          terraform plan -var "client_id=${{ secrets.TF_CLIENT_ID }}" -var "tenant_id=${{ secrets.TF_TENANT_ID }}" -var "subscription_id={{ secrets.TF_SUBSCRIPTION_ID }}" -var "client_secret={{ secrets.TF_CLIENT_SECRET }}"
         working-directory: ./terraform
 
       # - name: Terraform Apply
       #   run: |
-      #     terraform apply --auto-approve -var "client_id=${{ secrets.TF_CLIENT_ID }}" -var "tenant_id=${{ secrets.TF_TENANT_ID }}" -var "subscription_id={{secrets.TF_SUBSCRIPTION_ID}}" -var "client_secret={{secrets.TF_CLIENT_SECRET}}"
+      #     terraform apply --auto-approve -var "client_id=${{ secrets.TF_CLIENT_ID }}" -var "tenant_id=${{ secrets.TF_TENANT_ID }}" -var "subscription_id={{ secrets.TF_SUBSCRIPTION_ID }}" -var "client_secret={{ secrets.TF_CLIENT_SECRET }}"
       #   working-directory: ./terraform
