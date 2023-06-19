@@ -10,43 +10,25 @@ runs:
       uses: actions/download-artifact@v3
       with: 
         name: jar-file
-
-    - name: Get the latest tag
-      id: get_latest_tag
-      run: echo "::set-output name=tag::$(git describe --abbrev=0 --tags)"
-      shell: bash
-
-    - name: Increment the tag number
-      id: increment_tag
-      run: echo "::set-output name=tag::$(echo ${TAG#v} | awk -F. -v OFS=. '{$NF=$NF+1;} 1')"
-      shell: bash
     
     - name: Docker image build
       run: |
         docker build -t tharun13055/springboot-app:latest .
-        docker build -t tharun13055/springboot-app:${{ steps.increment_tag.outputs.tag }} .
+        docker build -t tharun13055/springboot-app:${{ github.run_number }} .
       shell: bash
     
-    - name: Aqua Security Trivy
-      uses: aquasecurity/trivy-action@0.11.2
-      with:
-        image-ref: 'tharun13055/springboot-app:lastest'
-        format: 'json'
-        exit-code: '0'
-        ignore-unfixed: true
-        vuln-type: 'os,library'
-    #   id: trivy-scan
-    #   env:
-    #     TRIVY_OUTPUT_FILE: trivy_report.txt
-
-    # - name: Save Trivy Report
-    #   run: echo "${{ steps.trivy-scan.outputs.result }}" > $TRIVY_OUTPUT_FILE
-    #   shell: bash
-
+    # - name: Aqua Security Trivy
+    #   uses: aquasecurity/trivy-action@0.11.2
+    #   with:
+    #     image-ref: 'tharun13055/springboot-app:lastest'
+    #     format: 'json'
+    #     exit-code: '0'
+    #     ignore-unfixed: true
+    #     vuln-type: 'os,library'
     
     # - name: docker image Push
     #   run: |
     #     docker push tharun13055/springboot-app:latest
-    #     docker push tharun13055/springboot-app:${{ steps.increment_tag.outputs.tag }}
+    #     docker push tharun13055/springboot-app:${{ github.run_number }}
     #   shell: bash
 
