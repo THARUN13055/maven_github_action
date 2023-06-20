@@ -17,4 +17,5 @@ module "kubernetes_cluster" {
   vm_size                 = "Standard_D2_v2"
   os_type                 = "Linux"
   node_pool_type          = "VirtualMachineScaleSets"
+  sku_tier                = "Free"
 }

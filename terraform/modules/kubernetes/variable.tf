@@ -34,4 +34,6 @@ variable "node_pool_type" {
   type = string
 }
 
-
+variable "sku_tier" {
+  type = string
+}

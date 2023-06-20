@@ -10,6 +10,8 @@ resource "azurerm_kubernetes_cluster" "aks-cluster" {
   resource_group_name = var.resource_group_name
   dns_prefix          = var.dns_prefix
 
+  sku_tier            = var.sku_tier
+
   default_node_pool {
     name       = var.default_node_pool_name
     node_count = var.default_node_pool_count

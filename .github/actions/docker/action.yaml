@@ -4,12 +4,11 @@ description: in this action we create docker image and push to the dockerhub
 
 runs:
   using: composite
-  
   steps:
     - name: Download jar file 
       uses: actions/download-artifact@v3
       with: 
-        name: jar-file
+        name: jar-file   
     
     - name: Docker image build
       run: |
@@ -26,9 +25,9 @@ runs:
     #     ignore-unfixed: true
     #     vuln-type: 'os,library'
     
-    # - name: docker image Push
-    #   run: |
-    #     docker push tharun13055/springboot-app:latest
-    #     docker push tharun13055/springboot-app:${{ github.run_number }}
-    #   shell: bash
+    - name: docker image Push
+      run: |
+        docker push tharun13055/springboot-app:latest
+        docker push tharun13055/springboot-app:${{ github.run_number }}
+      shell: bash
 
