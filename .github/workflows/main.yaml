@@ -108,12 +108,17 @@ jobs:
           tenant-id: ${{ secrets.TF_TENANT_ID }}
           subscription-id: ${{ secrets.TF_SUBSCRIPTION_ID }}
       
-      - name: Aks setup
-        uses: Azure/aks-set-context@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
-          cluster-name: ${{ env.CLUSTER_NAME }}
-          resource-group: ${{ env.RESOURSE_GROUP }}
+      # - name: Aks setup
+      #   uses: Azure/aks-set-context@v1
+      #   with:
+      #     creds: ${{ secrets.AZURE_CREDENTIALS }}
+      #     cluster-name: ${{ env.CLUSTER_NAME }}
+      #     resource-group: ${{ env.RESOURSE_GROUP }}
+
+      - name: connect to Aks
+        run: |
+          az account set --subscription ${{ secrets.TF_SUBSCRIPTION_ID }}
+          az aks get-credentials --resource-group learn --name kubernetes
       
       - name: to get the nodes
         run: |
