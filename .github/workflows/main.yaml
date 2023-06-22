@@ -114,9 +114,15 @@ jobs:
           az aks get-credentials --resource-group ${{ env.RESOURCE_GROUP}} --name ${{ env.CLUSTER_NAME }}
       
       - name: to get the nodes
+        continue-on-error: true
         run: |
           helm install java-springboot springboot-app-helm
-          sleep 20
+        shell: bash
+
+      - name: Helm upgrade
+        run: |
+          helm upgrade java-springboot springboot-app-helm -i
+          sleep 10
           kubectl get all --namespace springboot
           kubectl get svc --namespace springboot
         shell: bash
