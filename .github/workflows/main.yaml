@@ -115,9 +115,9 @@ jobs:
       
       - name: to get the nodes
         run: |
-          kubectl get node
-          kubectl get pods
-          ls
+          helm install java-springboot-chart /springboot-app-helm
+          kubectl get all --namespace springboot
+          kubectl get svc --namespace springboot
         shell: bash
 
 
