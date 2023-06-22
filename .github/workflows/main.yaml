@@ -93,7 +93,7 @@ jobs:
       id-token: write
     env:
       CLUSTER_NAME: kubernetes
-      RESOURSE_GROUP: learn
+      RESOURCE_GROUP: learn
     steps:
       - name: Github checkout
         uses: actions/checkout@v2
@@ -107,23 +107,17 @@ jobs:
           client-id: ${{ secrets.TF_CLIENT_ID }}
           tenant-id: ${{ secrets.TF_TENANT_ID }}
           subscription-id: ${{ secrets.TF_SUBSCRIPTION_ID }}
-      
-      # - name: Aks setup
-      #   uses: Azure/aks-set-context@v1
-      #   with:
-      #     creds: ${{ secrets.AZURE_CREDENTIALS }}
-      #     cluster-name: ${{ env.CLUSTER_NAME }}
-      #     resource-group: ${{ env.RESOURSE_GROUP }}
 
       - name: connect to Aks
         run: |
           az account set --subscription ${{ secrets.TF_SUBSCRIPTION_ID }}
-          az aks get-credentials --resource-group learn --name kubernetes
+          az aks get-credentials --resource-group ${{ env.RESOURCE_GROUP}} --name ${{ env.CLUSTER_NAME }}
       
       - name: to get the nodes
         run: |
           kubectl get node
           kubectl get pods
+          ls
         shell: bash
 
 
