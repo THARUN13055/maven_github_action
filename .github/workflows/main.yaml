@@ -116,7 +116,7 @@ jobs:
       - name: to get the nodes
         run: |
           helm install java-springboot springboot-app-helm
-          sleep 10
+          sleep 20
           kubectl get all --namespace springboot
           kubectl get svc --namespace springboot
         shell: bash
