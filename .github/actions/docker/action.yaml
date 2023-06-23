@@ -16,14 +16,14 @@ runs:
         docker build -t tharun13055/springboot-app:${{ github.run_number }} .
       shell: bash
     
-    # - name: Aqua Security Trivy
-    #   uses: aquasecurity/trivy-action@0.11.2
-    #   with:
-    #     image-ref: 'tharun13055/springboot-app:lastest'
-    #     format: 'json'
-    #     exit-code: '0'
-    #     ignore-unfixed: true
-    #     vuln-type: 'os,library'
+    - name: Aqua Security Trivy
+      uses: aquasecurity/trivy-action@0.11.2
+      with:
+        image-ref: 'tharun13055/springboot-app:lastest'
+        format: 'json'
+        exit-code: '0'
+        ignore-unfixed: true
+        vuln-type: 'os,library'
     
     - name: docker image Push
       run: |

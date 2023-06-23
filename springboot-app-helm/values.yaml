@@ -5,6 +5,10 @@ namespace:
 labels:
    application: springboot-app
 
+
+#Pod
+Podname: springboot-pod
+
 #deployment
 deploymentname: springboot-deployment
 spec:

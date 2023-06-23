@@ -3,20 +3,22 @@ name: maven-springboot-project
 on: workflow_dispatch
 
 jobs:
-  # maven-build:
-  #   runs-on: ubuntu-22.04
-  #   steps:
-  #     - name: Git Checkout
-  #       uses: actions/checkout@v3
-  #     - name: Cache local Maven repository
-  #       uses: actions/cache@v2
-  #       with:
-  #         path: ~/.m2/repository
-  #         key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-  #         restore-keys: |
-  #           ${{ runner.os }}-maven-
-  #     - name: Maven jar package
-  #       uses: ./.github/actions/maven-jar
+  maven-build:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v3
+      # - name: Cache local Maven repository
+      #   uses: actions/cache@v2
+      #   with:
+      #     path: ~/.m2/repository
+      #     key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-maven-
+      - name: Maven jar package
+        uses: ./.github/actions/maven-jar
+
+
 
   # maven-dep-check:
   #   runs-on: ubuntu-22.04
@@ -27,73 +29,81 @@ jobs:
   #   - name: dependency-check
   #     uses: ./.github/actions/owasp
 
-  # Sonarqube:
-  #   runs-on: ubuntu-22.04
-  #   needs: maven-build
-  #   steps:
-  #     - name: Git Checkout
-  #       uses: actions/checkout@v3
-  #     - name: Sonarqube scanner
-  #       uses: ./.github/actions/sonarqube
-  #     - name: Build and analyze
-  #       env:
-  #         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-  #         SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-  #       run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=javaspringboot
 
-  # docker:
-  #   runs-on: ubuntu-22.04
-  #   needs: maven-build
-  #   steps:
-  #     - name: Git Checkout
-  #       uses: actions/checkout@v3
-  #     - name: Docker login
-  #       env:
-  #         DOCKER_USER: ${{ secrets.DOCKER_USER }}
-  #         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-  #       run: |
-  #         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-  #       shell: bash
-  #     - name: docker-push-scan
-  #       uses: ./.github/actions/docker
+
+  Sonarqube:
+    runs-on: ubuntu-22.04
+    needs: maven-build
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v3
+      - name: Sonarqube scanner
+        uses: ./.github/actions/sonarqube
+      - name: Build and analyze
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=javaspringboot
+
+
+
+  docker:
+    runs-on: ubuntu-22.04
+    needs: Sonarqube
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v3
+      - name: Docker login
+        env:
+          DOCKER_USER: ${{ secrets.DOCKER_USER }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+        shell: bash
+      - name: docker-push-scan
+        uses: ./.github/actions/docker
+
+
         
-  # nexus:
-  #   runs-on: ubuntu-22.04
-  #   needs: maven-build
-  #   steps:
-  #   - name: git Checkout
-  #     uses: actions/checkout@v3
-  #   # - name: Cache local Maven repository
-  #   #   uses: actions/cache@v2
-  #   #   with:
-  #   #     path: ~/.m2/repository
-  #   #     key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-  #   #     restore-keys: |
-  #   #       ${{ runner.os }}-maven-
+  nexus:
+    runs-on: ubuntu-22.04
+    needs: docker
+    steps:
+    - name: git Checkout
+      uses: actions/checkout@v3
+    # - name: Cache local Maven repository
+    #   uses: actions/cache@v2
+    #   with:
+    #     path: ~/.m2/repository
+    #     key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+    #     restore-keys: |
+    #       ${{ runner.os }}-maven-
+    - name: git action add
+      uses: ./.github/actions/nexus
+    - name: Nexus Repo Publish
+      uses: sonatype-nexus-community/nexus-repo-github-action@master
+      with:
+        serverUrl: ${{ secrets.NEXUS_URL}}
+        username: ${{ secrets.NEXUS_USERNAME }}
+        password: ${{ secrets.NEXUS_PASSWORD }}
+        format: maven2
+        repository: nexus
+        coordinates: groupId=com.abhishek artifactId=spring-boot-demo version=1.1
+        assets: extension=jar
+        filename: ./target/springboot-app.jar
 
-  #   - name: git action add
-  #     uses: ./.github/actions/nexus
-  #   - name: Nexus Repo Publish
-  #     uses: sonatype-nexus-community/nexus-repo-github-action@master
-  #     with:
-  #       serverUrl: ${{ secrets.NEXUS_URL}}
-  #       username: ${{ secrets.NEXUS_USERNAME }}
-  #       password: ${{ secrets.NEXUS_PASSWORD }}
-  #       format: maven2
-  #       repository: nexus
-  #       coordinates: groupId=com.abhishek artifactId=spring-boot-demo version=1.1
-  #       assets: extension=jar
-  #       filename: ./target/springboot-app.jar
+
   
   Kubernetes:
     runs-on: ubuntu-22.04
+    needs: nexus
     permissions:
       contents: read
       pages: write
       id-token: write
     env:
-      CLUSTER_NAME: kubernetes
-      RESOURCE_GROUP: learn
+      CLUSTER_NAME: springboot-aks
+      RESOURCE_GROUP: kubernetes-rsg
     steps:
       - name: Github checkout
         uses: actions/checkout@v2
@@ -126,5 +136,4 @@ jobs:
           kubectl get all --namespace springboot
           kubectl get svc --namespace springboot
         shell: bash
-
-
+    
