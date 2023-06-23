@@ -1,5 +1,12 @@
 name: terraform kuberentes
-on: workflow_dispatch
+on: 
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'Terraform plan or apply'
+        default: 'apply'
+        required: true
+
 jobs:
   terraform:
     runs-on: ubuntu-22.04
@@ -36,10 +43,12 @@ jobs:
 
       - name: Terraform Plan
         run: |
-          terraform plan -var "subscription_id=${{ secrets.TF_SUBSCRIPTION_ID }}" -var "client_id=${{ secrets.TF_CLIENT_ID }}" -var "tenant_id=${{ secrets.TF_TENANT_ID }}" -var "client_secret=${{ secrets.TF_CLIENT_SECRET }}"
+          terraform ${{ github.event.inputs.name }} -var "subscription_id=${{ secrets.TF_SUBSCRIPTION_ID }}" -var "client_id=${{ secrets.TF_CLIENT_ID }}" -var "tenant_id=${{ secrets.TF_TENANT_ID }}" -var "client_secret=${{ secrets.TF_CLIENT_SECRET }}"
         working-directory: ./terraform
 
-      - name: Terraform Apply
-        run: |
-          terraform apply --auto-approve -var "subscription_id=${{ secrets.TF_SUBSCRIPTION_ID }}" -var "client_id=${{ secrets.TF_CLIENT_ID }}" -var "tenant_id=${{ secrets.TF_TENANT_ID }}" -var "client_secret=${{ secrets.TF_CLIENT_SECRET }}"
-        working-directory: ./terraform
+      # - name: Terraform Apply
+      #   run: |
+      #     terraform ${{ github.event.inputs.name }} --auto-approve -var "subscription_id=${{ secrets.TF_SUBSCRIPTION_ID }}" -var "client_id=${{ secrets.TF_CLIENT_ID }}" -var "tenant_id=${{ secrets.TF_TENANT_ID }}" -var "client_secret=${{ secrets.TF_CLIENT_SECRET }}"
+      #   working-directory: ./terraform
+
+        

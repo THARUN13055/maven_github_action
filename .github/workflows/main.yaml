@@ -20,122 +20,122 @@ jobs:
 
 
 
-  # # maven-dep-check:
-  # #   runs-on: ubuntu-22.04
-  # #   needs: maven-build
-  # #   steps:
-  # #   - name: Git Checkout
-  # #     uses: actions/checkout@v3
-  # #   - name: dependency-check
-  # #     uses: ./.github/actions/owasp
-
-
-
-  # Sonarqube:
+  # maven-dep-check:
   #   runs-on: ubuntu-22.04
   #   needs: maven-build
   #   steps:
-  #     - name: Git Checkout
-  #       uses: actions/checkout@v3
-  #     - name: Sonarqube scanner
-  #       uses: ./.github/actions/sonarqube
-  #     - name: Build and analyze
-  #       env:
-  #         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-  #         SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-  #       run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=javaspringboot
+  #   - name: Git Checkout
+  #     uses: actions/checkout@v3
+  #   - name: dependency-check
+  #     uses: ./.github/actions/owasp
 
 
 
-  # docker:
-  #   runs-on: ubuntu-22.04
-  #   needs: Sonarqube
-  #   steps:
-  #     - name: Git Checkout
-  #       uses: actions/checkout@v3
-  #     - name: Docker login
-  #       env:
-  #         DOCKER_USER: ${{ secrets.DOCKER_USER }}
-  #         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-  #       run: |
-  #         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-  #       shell: bash
-  #     - name: docker-push-scan
-  #       uses: ./.github/actions/docker
+  Sonarqube:
+    runs-on: ubuntu-22.04
+    needs: maven-build
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v3
+      - name: Sonarqube scanner
+        uses: ./.github/actions/sonarqube
+      - name: Build and analyze
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        run: mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=javaspringboot
+
+
+
+  docker:
+    runs-on: ubuntu-22.04
+    needs: Sonarqube
+    steps:
+      - name: Git Checkout
+        uses: actions/checkout@v3
+      - name: Docker login
+        env:
+          DOCKER_USER: ${{ secrets.DOCKER_USER }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+        shell: bash
+      - name: docker-push-scan
+        uses: ./.github/actions/docker
 
 
         
-  # nexus:
-  #   runs-on: ubuntu-22.04
-  #   needs: docker
-  #   steps:
-  #   - name: git Checkout
-  #     uses: actions/checkout@v3
-  #   # - name: Cache local Maven repository
-  #   #   uses: actions/cache@v2
-  #   #   with:
-  #   #     path: ~/.m2/repository
-  #   #     key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-  #   #     restore-keys: |
-  #   #       ${{ runner.os }}-maven-
-  #   - name: git action add
-  #     uses: ./.github/actions/nexus
-  #   - name: Nexus Repo Publish
-  #     uses: sonatype-nexus-community/nexus-repo-github-action@master
-  #     with:
-  #       serverUrl: ${{ secrets.NEXUS_URL}}
-  #       username: ${{ secrets.NEXUS_USERNAME }}
-  #       password: ${{ secrets.NEXUS_PASSWORD }}
-  #       format: maven2
-  #       repository: nexus
-  #       coordinates: groupId=com.abhishek artifactId=spring-boot-demo version=1.1
-  #       assets: extension=jar
-  #       filename: ./target/springboot-app.jar
+  nexus:
+    runs-on: ubuntu-22.04
+    needs: docker
+    steps:
+    - name: git Checkout
+      uses: actions/checkout@v3
+    # - name: Cache local Maven repository
+    #   uses: actions/cache@v2
+    #   with:
+    #     path: ~/.m2/repository
+    #     key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+    #     restore-keys: |
+    #       ${{ runner.os }}-maven-
+    - name: git action add
+      uses: ./.github/actions/nexus
+    - name: Nexus Repo Publish
+      uses: sonatype-nexus-community/nexus-repo-github-action@master
+      with:
+        serverUrl: ${{ secrets.NEXUS_URL}}
+        username: ${{ secrets.NEXUS_USERNAME }}
+        password: ${{ secrets.NEXUS_PASSWORD }}
+        format: maven2
+        repository: nexus
+        coordinates: groupId=com.abhishek artifactId=spring-boot-demo version=1.1
+        assets: extension=jar
+        filename: ./target/springboot-app.jar
 
 
   
-  # Kubernetes:
-  #   runs-on: ubuntu-22.04
-  #   needs: nexus
-  #   permissions:
-  #     contents: read
-  #     pages: write
-  #     id-token: write
-  #   env:
-  #     CLUSTER_NAME: springboot-aks
-  #     RESOURCE_GROUP: kubernetes-rsg
-  #   steps:
-  #     - name: Github checkout
-  #       uses: actions/checkout@v2
+  Kubernetes:
+    runs-on: ubuntu-22.04
+    needs: nexus
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    env:
+      CLUSTER_NAME: springboot-aks
+      RESOURCE_GROUP: kubernetes-rsg
+    steps:
+      - name: Github checkout
+        uses: actions/checkout@v2
       
-  #     - name: Helm tool installer
-  #       uses: Azure/setup-helm@v3
+      - name: Helm tool installer
+        uses: Azure/setup-helm@v3
 
-  #     - name: Azure Login
-  #       uses: azure/login@v1
-  #       with:
-  #         client-id: ${{ secrets.TF_CLIENT_ID }}
-  #         tenant-id: ${{ secrets.TF_TENANT_ID }}
-  #         subscription-id: ${{ secrets.TF_SUBSCRIPTION_ID }}
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.TF_CLIENT_ID }}
+          tenant-id: ${{ secrets.TF_TENANT_ID }}
+          subscription-id: ${{ secrets.TF_SUBSCRIPTION_ID }}
 
-  #     - name: connect to Aks
-  #       run: |
-  #         az account set --subscription ${{ secrets.TF_SUBSCRIPTION_ID }}
-  #         az aks get-credentials --resource-group ${{ env.RESOURCE_GROUP}} --name ${{ env.CLUSTER_NAME }}
+      - name: connect to Aks
+        run: |
+          az account set --subscription ${{ secrets.TF_SUBSCRIPTION_ID }}
+          az aks get-credentials --resource-group ${{ env.RESOURCE_GROUP}} --name ${{ env.CLUSTER_NAME }}
       
-  #     - name: to get the nodes
-  #       continue-on-error: true
-  #       run: |
-  #         helm install java-springboot springboot-app-helm
-  #       shell: bash
+      - name: to get the nodes
+        continue-on-error: true
+        run: |
+          helm install java-springboot springboot-app-helm
+        shell: bash
 
-  #     - name: Helm upgrade
-  #       run: |
-  #         helm upgrade java-springboot springboot-app-helm -i
-  #         sleep 10
-  #         kubectl get all --namespace springboot
-  #         kubectl get svc --namespace springboot
-  #       shell: bash
+      - name: Helm upgrade
+        run: |
+          helm upgrade java-springboot springboot-app-helm -i
+          sleep 10
+          kubectl get all --namespace springboot
+          kubectl get svc --namespace springboot
+        shell: bash
   
   slack:
     runs-on: ubuntu-22.04
