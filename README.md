@@ -13,9 +13,9 @@
 - Nexus
 - Docker
 - trivy
-- ArgoCD
 - Terraform
 - Kubernetes using Helm
+- Slack Notification
 
 ## Java implementation
 
@@ -84,7 +84,6 @@ In this Github action we use some of the actions. And here we use **composite** 
 5. nexus
 6. terraform
 7. kubernetes
-8. argocd
-9. stack-notification
+8. stack-notification
 
 - this are the action which are we used here
